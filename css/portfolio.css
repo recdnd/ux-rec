@@ -460,7 +460,7 @@ body {
   outline-offset: 3px;
 }
 
-/* Monitor live indicator — not a control */
+/* Monitor signal — power / video output toggle (small hit target, same look) */
 .rec-display__signal {
   position: absolute;
   top: 8px;
@@ -468,11 +468,43 @@ body {
   z-index: 4;
   width: 9px;
   height: 9px;
+  padding: 0;
+  margin: 0;
   border-radius: 50%;
   background: var(--rec-signal);
   border: 1px solid var(--rec-signal-ring);
   box-shadow: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  line-height: 0;
+  pointer-events: auto;
+  transition: none;
+}
+
+.rec-display__signal:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.rec-display__signal:focus {
+  outline: none;
+}
+
+.rec-display__signal:focus-visible {
+  outline: 1px solid var(--rec-text-primary);
+  outline-offset: 2px;
+}
+
+.rec-display__signal:disabled {
+  cursor: default;
+  opacity: 0.45;
   pointer-events: none;
+}
+
+.rec-display[data-power-off="true"] .rec-display__signal:not(:disabled) {
+  opacity: 0.55;
+  filter: grayscale(0.35);
 }
 
 .rec-display__viewport {

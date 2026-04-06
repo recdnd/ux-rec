@@ -204,13 +204,20 @@
 
     var currentIndex = -1;
     var videoLoadGeneration = 0;
+    var isVideoPaused = false;
+    var isVideoPowerOff = false;
+
+    function isMobileViewport() {
+      return (
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(max-width: 1139px)").matches
+      );
+    }
 
     function syncDockFloat() {
       var dock = document.getElementById("rec-dock");
       if (!dock) return;
-      var mobile =
-        typeof window.matchMedia === "function" &&
-        window.matchMedia("(max-width: 1139px)").matches;
+      var mobile = isMobileViewport();
       var portrait = display.getAttribute("data-orientation") === "portrait";
       var idle = display.getAttribute("data-idle") === "true";
       var on = mobile && portrait && !idle;
@@ -240,8 +247,11 @@
 
     function setIdleMonitor() {
       currentIndex = -1;
+      isVideoPaused = false;
+      isVideoPowerOff = false;
       hideAllMedia();
       resetMonitorShape(display);
+      display.removeAttribute("data-power-off");
       placeholderEl.hidden = false;
       if (placeholderText) {
         placeholderText.textContent = "Preview monitor idle.";
@@ -253,6 +263,8 @@
         "Preview monitor."
       );
       setPlayingIndex(-1);
+      updatePlayButtonStates();
+      updateSignalButton();
       syncDockFloat();
     }
 
@@ -262,6 +274,112 @@
         var on = playingIndex >= 0 && idx === playingIndex;
         el.setAttribute("data-playing", on ? "true" : "false");
       });
+    }
+
+    /* ▶ / ⏸︎ 只看「是否當前 case + 實際是否在播」，與從卡片或按鈕進入無關 */
+    function updatePlayButtonStates() {
+      rail.querySelectorAll(".rec-card").forEach(function (card) {
+        var idx = parseInt(card.getAttribute("data-case-index"), 10);
+        var btn = card.querySelector(".rec-card__play");
+        if (!btn) return;
+        var item = cases[idx];
+        var title = item && item.title ? String(item.title) : "case";
+        var isActive = idx === currentIndex;
+        var playingNow =
+          isActive &&
+          !isVideoPowerOff &&
+          !videoEl.paused &&
+          !videoEl.hasAttribute("hidden");
+        if (playingNow) {
+          btn.textContent = "\u23F8\uFE0E";
+          btn.setAttribute("aria-label", "Pause " + title);
+          btn.setAttribute("title", "Pause");
+        } else {
+          btn.textContent = "\u25B6";
+          var canResume =
+            isActive && !isVideoPowerOff && (videoEl.paused || videoEl.hasAttribute("hidden"));
+          btn.setAttribute(
+            "aria-label",
+            (canResume ? "Resume " : "Play ") + title
+          );
+          btn.setAttribute("title", canResume ? "Resume" : "Play");
+        }
+      });
+    }
+
+    function updateSignalButton() {
+      var signalBtn = display.querySelector(".rec-display__signal");
+      if (!signalBtn) return;
+      if (currentIndex < 0) {
+        signalBtn.disabled = true;
+        signalBtn.setAttribute("aria-label", "Video signal (no case selected)");
+        signalBtn.removeAttribute("title");
+        return;
+      }
+      signalBtn.disabled = false;
+      if (isVideoPowerOff) {
+        signalBtn.setAttribute("aria-label", "Turn video on");
+        signalBtn.setAttribute("title", "Turn video on");
+      } else {
+        signalBtn.setAttribute("aria-label", "Turn video off");
+        signalBtn.setAttribute("title", "Turn video off");
+      }
+    }
+
+    function syncPauseStateFromVideo() {
+      if (isVideoPowerOff) {
+        updatePlayButtonStates();
+        return;
+      }
+      isVideoPaused = videoEl.paused;
+      updatePlayButtonStates();
+    }
+
+    function pauseCurrentVideo() {
+      if (currentIndex < 0 || isVideoPowerOff) return;
+      if (videoEl.hasAttribute("hidden")) return;
+      videoEl.pause();
+    }
+
+    function resumeCurrentVideo() {
+      if (currentIndex < 0 || isVideoPowerOff) return;
+      videoEl.hidden = false;
+      videoEl.removeAttribute("hidden");
+      videoEl.play().catch(function () {});
+    }
+
+    function powerOffVideo() {
+      if (currentIndex < 0 || isVideoPowerOff) return;
+      isVideoPowerOff = true;
+      isVideoPaused = false;
+      videoEl.pause();
+      videoEl.setAttribute("hidden", "");
+      placeholderEl.hidden = false;
+      if (placeholderText) {
+        placeholderText.textContent = "SIGNAL OFF";
+      }
+      captionEl.textContent = "SIGNAL OFF";
+      display.setAttribute("data-power-off", "true");
+      updatePlayButtonStates();
+      updateSignalButton();
+    }
+
+    function powerOnVideo() {
+      if (currentIndex < 0 || !isVideoPowerOff) return;
+      isVideoPowerOff = false;
+      isVideoPaused = false;
+      placeholderEl.hidden = true;
+      if (placeholderText) {
+        placeholderText.textContent = "";
+      }
+      videoEl.hidden = false;
+      videoEl.removeAttribute("hidden");
+      var item = cases[currentIndex];
+      captionEl.textContent = item && item.title ? String(item.title) : "\u2014";
+      display.removeAttribute("data-power-off");
+      videoEl.play().catch(function () {});
+      updatePlayButtonStates();
+      updateSignalButton();
     }
 
     function showVideoMedia(videoEl, displayEl, media, captionText) {
@@ -338,23 +456,89 @@
       }
       videoEl.setAttribute("hidden", "");
       videoEl.pause();
+      isVideoPowerOff = false;
+      updatePlayButtonStates();
+      updateSignalButton();
     });
+
+    videoEl.addEventListener("play", syncPauseStateFromVideo);
+    videoEl.addEventListener("pause", syncPauseStateFromVideo);
+
+    function scrollCardIntoView(caseId, railEl) {
+      if (!caseId || !railEl) return;
+      var card = railEl.querySelector(
+        '.rec-card[data-case-id="' + String(caseId).replace(/"/g, '\\"') + '"]'
+      );
+      if (!card) return;
+
+      var cardRect = card.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight || 0;
+      var margin = 12;
+      var fullyVisible =
+        cardRect.top >= margin &&
+        cardRect.bottom <= vh - margin;
+
+      if (fullyVisible) return;
+
+      card.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    }
 
     function playCaseByIndex(index) {
       if (index < 0 || index >= cases.length) return;
       currentIndex = index;
+      isVideoPowerOff = false;
+      isVideoPaused = false;
+      display.removeAttribute("data-power-off");
       var item = cases[index];
       var media = item.resolvedMedia || {};
       console.log("[playCaseByIndex]", index, item.id, media.src);
 
       showVideoMedia(videoEl, display, media, item.title ? String(item.title) : "—");
       setPlayingIndex(index);
+      updatePlayButtonStates();
+      updateSignalButton();
+      scrollCardIntoView(item.id, rail);
     }
 
     function nextChannel() {
       if (cases.length === 0) return;
       if (currentIndex < 0) return;
+      if (isVideoPowerOff) return;
       playCaseByIndex((currentIndex + 1) % cases.length);
+    }
+
+    function handlePlayButtonClick(index) {
+      if (index !== currentIndex) {
+        playCaseByIndex(index);
+        return;
+      }
+      if (isVideoPowerOff) {
+        powerOnVideo();
+        return;
+      }
+      if (videoEl.paused) {
+        resumeCurrentVideo();
+      } else {
+        pauseCurrentVideo();
+      }
+    }
+
+    function handleCardBodyClick(index) {
+      if (index !== currentIndex) {
+        playCaseByIndex(index);
+        return;
+      }
+      if (isVideoPowerOff) {
+        powerOnVideo();
+        return;
+      }
+      if (videoEl.paused) {
+        resumeCurrentVideo();
+      }
     }
 
     function onMonitorActivate(e) {
@@ -366,7 +550,9 @@
         dock.setAttribute("data-expanded", "true");
         return;
       }
+      if (isMobileViewport()) return;
       if (currentIndex < 0) return;
+      if (isVideoPowerOff) return;
       nextChannel();
     }
 
@@ -380,7 +566,9 @@
         dock.setAttribute("data-expanded", "true");
         return;
       }
+      if (isMobileViewport()) return;
       if (currentIndex < 0) return;
+      if (isVideoPowerOff) return;
       nextChannel();
     });
 
@@ -434,10 +622,8 @@
 
       var toggleBtn = card.querySelector(".rec-card__toggle");
       var playBtn = card.querySelector(".rec-card__play");
-      playBtn.setAttribute(
-        "aria-label",
-        "Play " + String(item.title || "case")
-      );
+      playBtn.setAttribute("aria-label", "Play " + String(item.title || "case"));
+      playBtn.setAttribute("title", "Play");
 
       function setCollapsed(collapsed) {
         card.setAttribute("data-collapsed", collapsed ? "true" : "false");
@@ -457,12 +643,12 @@
 
       playBtn.addEventListener("click", function (e) {
         e.stopPropagation();
-        playCaseByIndex(index);
+        handlePlayButtonClick(index);
       });
 
       card.addEventListener("click", function (e) {
         if (e.target.closest(".rec-card__toggle") || e.target.closest(".rec-card__play")) return;
-        playCaseByIndex(index);
+        handleCardBodyClick(index);
       });
 
       rail.appendChild(card);
@@ -471,6 +657,20 @@
     var ghostIndex = cases.findIndex(function (c) {
       return c.id === "ghostwriting";
     });
+    var signalBtn = display.querySelector(".rec-display__signal");
+    if (signalBtn) {
+      signalBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (currentIndex < 0) return;
+        if (isVideoPowerOff) {
+          powerOnVideo();
+        } else {
+          powerOffVideo();
+        }
+      });
+    }
+
     if (ghostIndex >= 0) {
       playCaseByIndex(ghostIndex);
     } else {

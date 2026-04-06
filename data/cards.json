@@ -3,11 +3,11 @@
     "id": "session-stream",
     "order": 1,
     "title": "Session Stream",
-    "statement": "AI conversations exist in a continuous scrollable workspace instead of isolated sessions.",
-    "summary": "Designed a mobile-first interface where multiple documents and sessions are navigated through vertical scrolling instead of switching between separate views.",
+    "statement": "AI work unfolds as a continuous workspace rather than a series of closed sessions.",
+    "summary": "Designed a mobile-first navigation model in which documents, conversations, and active contexts are traversed through continuous vertical movement instead of repeated session switching.",
     "role": [
+      "Interaction model",
       "UX concept",
-      "Interaction design",
       "Prototype implementation"
     ],
     "product": "Spiral",
@@ -18,9 +18,9 @@
       "Workspace"
     ],
     "detail": {
-      "problem": "AI tools typically isolate conversations into separate sessions, making context switching slow and fragmented.",
-      "designMove": "Reframed sessions as a continuous spatial stream, where users move between contexts by scrolling instead of entering and exiting views.",
-      "outcome": "Transforms conversation into a navigable workspace, reducing friction and making multi-session interaction feel fluid and spatial."
+      "problem": "Conventional AI interfaces split work into separate sessions, forcing users to repeatedly enter, exit, and reconstruct context across isolated views.",
+      "designMove": "Recast sessions as positions inside a single spatial stream, so movement across tasks happens through scrolling rather than through container changes.",
+      "outcome": "Shifts conversation from session management to spatial navigation, making context easier to retain, revisit, and work across."
     },
     "media": {
       "type": "video",
@@ -36,8 +36,8 @@
     "id": "meta-control",
     "order": 2,
     "title": "Meta Control",
-    "statement": "Users modify system behavior through natural language instead of configuration panels.",
-    "summary": "Designed a conversational interface where users can change document type, access level, and behavior by issuing commands directly in the workspace.",
+    "statement": "System behavior is edited in context through language instead of hidden control panels.",
+    "summary": "Designed an interaction layer where users can change document type, access state, and behavioral rules directly from within the workspace using natural language.",
     "role": [
       "UX concept",
       "Interaction design",
@@ -52,9 +52,9 @@
       "System control"
     ],
     "detail": {
-      "problem": "System configuration is usually hidden behind complex settings and technical metadata, making it inaccessible during normal workflows.",
-      "designMove": "Introduced a conversational control layer where users can modify document-level metadata through natural language, with explicit apply states.",
-      "outcome": "Turns system configuration into an interactive process, making structure and behavior directly manipulable inside the main interface."
+      "problem": "In most systems, configuration is pushed into secondary panels and technical metadata flows, separating operational control from the work itself.",
+      "designMove": "Placed behavioral control inside the primary interface by letting users issue structural changes in language, with explicit application states that keep the system legible.",
+      "outcome": "Turns configuration into a first-class interaction, allowing system behavior to be modified where the work is actually happening."
     },
     "media": {
       "type": "video",
@@ -70,11 +70,11 @@
     "id": "header-system",
     "order": 3,
     "title": "Header System",
-    "statement": "Documents behave as programmable units controlled by structured metadata.",
-    "summary": "Designed a document model where headers define behavior, access, and system rules, with explicit update states and application flow.",
+    "statement": "Documents operate as active system objects rather than passive files.",
+    "summary": "Designed a document model where structured headers define execution logic, permissions, and system behavior, making control state readable and editable as part of the document itself.",
     "role": [
-      "UX concept",
       "System design",
+      "UX concept",
       "Interaction design"
     ],
     "product": "Spiral",
@@ -85,9 +85,9 @@
       "Structure"
     ],
     "detail": {
-      "problem": "Documents are usually treated as passive text containers, with behavior defined elsewhere in the system.",
-      "designMove": "Elevated document headers into active control layers that define behavior, permissions, and system interaction.",
-      "outcome": "Transforms documents into programmable units that can influence how the system operates."
+      "problem": "Most software separates content from behavior, leaving users to navigate between the document they are working on and the hidden structures that determine how it behaves.",
+      "designMove": "Promoted the document header into an explicit control surface, so the governing logic of a document can be inspected, modified, and applied in place.",
+      "outcome": "Repositions documents as programmable interface units whose structure is directly usable rather than concealed in the system layer."
     },
     "media": {
       "type": "video",
@@ -103,8 +103,8 @@
     "id": "ghostwriting",
     "order": 4,
     "title": "Ghostwriting",
-    "statement": "AI writes alongside the user instead of interrupting the writing flow.",
-    "summary": "Designed an in-place writing mode where AI responses appear directly inside the document rather than in a separate chat interface.",
+    "statement": "AI assistance appears inside the draft instead of in a separate conversational channel.",
+    "summary": "Designed an in-place co-writing mode where generated output is inserted directly into the document, keeping composition and assistance inside the same working surface.",
     "role": [
       "UX concept",
       "Interaction design",
@@ -118,9 +118,9 @@
       "Interaction"
     ],
     "detail": {
-      "problem": "Most AI writing tools interrupt the user by requiring context switching to chat interfaces.",
-      "designMove": "Embedded AI responses directly into the writing surface, allowing continuous drafting without breaking flow.",
-      "outcome": "Creates a co-writing experience where AI becomes part of the document rather than an external assistant."
+      "problem": "Typical AI writing tools split drafting and assistance across two interfaces, which breaks writing flow and turns revision into a context-switching task.",
+      "designMove": "Collapsed the editor and the assistant into one surface, so generation happens exactly where the text is being written and revised.",
+      "outcome": "Produces a co-writing model in which AI behaves as part of the drafting environment rather than as an external sidecar."
     },
     "media": {
       "type": "video",
