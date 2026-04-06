@@ -105,22 +105,24 @@ body {
 
 .rec-util {
   position: fixed;
-  top: var(--rec-hero-pad);
-  right: var(--rec-hero-pad);
-  z-index: 42;
+  top: auto !important;
+  left: auto !important;
+  right: 1px !important;
+  bottom: calc(var(--rec-foot-h) + env(safe-area-inset-bottom, 0px) + 1px) !important;
+  z-index: 45;
 }
 
 .rec-util__btn {
-  border: 1px solid var(--rec-border);
+  border: none;
   background: transparent;
   color: var(--rec-text-label);
   font-family: var(--rec-font);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
   line-height: 1;
-  padding: 4px 7px;
-  border-radius: 4px;
+  padding: 0;
+  border-radius: 0;
   cursor: pointer;
 }
 
@@ -728,16 +730,6 @@ body {
     left: 2px;
     right: 2px;
     max-width: none;
-  }
-
-  .rec-util {
-    top: 2px;
-    right: 2px;
-  }
-
-  .rec-util__btn {
-    font-size: 9px;
-    padding: 3px 6px;
   }
 
   .rec-hero__link {

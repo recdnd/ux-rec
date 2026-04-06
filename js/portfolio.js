@@ -123,7 +123,11 @@
     document.body.setAttribute("data-theme", isDark ? "dark" : "light");
     if (btn) {
       btn.setAttribute("aria-pressed", isDark ? "true" : "false");
-      btn.textContent = isDark ? "Normal" : "Invert";
+      btn.textContent = isDark ? "🌕" : "🌑";
+      btn.setAttribute(
+        "aria-label",
+        isDark ? "Switch to light mode" : "Switch to dark mode"
+      );
     }
   }
 
