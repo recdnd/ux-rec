@@ -131,22 +131,18 @@
     }
   }
 
-  function initDockedPreview(dock) {
+  function initDockedPreview(dock, syncDockFloat) {
     if (!dock) return;
     var backdrop = dock.querySelector(".rec-dock__backdrop");
     if (!backdrop) return;
 
     var mq =
       typeof window.matchMedia === "function"
-        ? window.matchMedia("(min-width: 1140px)")
+        ? window.matchMedia("(max-width: 1139px)")
         : null;
 
-    function isDockMode() {
-      return mq && mq.matches;
-    }
-
     function setExpanded(on) {
-      if (!isDockMode()) {
+      if (dock.getAttribute("data-dock-float") !== "true") {
         dock.setAttribute("data-expanded", "false");
         return;
       }
@@ -160,15 +156,13 @@
 
     document.addEventListener("keydown", function (e) {
       if (e.key !== "Escape") return;
-      if (!isDockMode()) return;
+      if (dock.getAttribute("data-dock-float") !== "true") return;
       if (dock.getAttribute("data-expanded") !== "true") return;
       setExpanded(false);
     });
 
     function onMqChange() {
-      if (!mq || !mq.matches) {
-        dock.setAttribute("data-expanded", "false");
-      }
+      if (typeof syncDockFloat === "function") syncDockFloat();
     }
 
     if (mq) {
@@ -211,6 +205,23 @@
     var currentIndex = -1;
     var videoLoadGeneration = 0;
 
+    function syncDockFloat() {
+      var dock = document.getElementById("rec-dock");
+      if (!dock) return;
+      var mobile =
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(max-width: 1139px)").matches;
+      var portrait = display.getAttribute("data-orientation") === "portrait";
+      var idle = display.getAttribute("data-idle") === "true";
+      var on = mobile && portrait && !idle;
+      if (on) {
+        dock.setAttribute("data-dock-float", "true");
+      } else {
+        dock.removeAttribute("data-dock-float");
+        dock.setAttribute("data-expanded", "false");
+      }
+    }
+
     function hideAllMedia() {
       videoEl.pause();
       videoEl.hidden = true;
@@ -242,6 +253,7 @@
         "Preview monitor."
       );
       setPlayingIndex(-1);
+      syncDockFloat();
     }
 
     function setPlayingIndex(playingIndex) {
@@ -255,6 +267,7 @@
     function showVideoMedia(videoEl, displayEl, media, captionText) {
       var gen = ++videoLoadGeneration;
       resetMonitorShape(displayEl);
+      syncDockFloat();
 
       videoEl.pause();
       videoEl.removeAttribute("src");
@@ -273,6 +286,7 @@
       var handleMetadata = function () {
         if (gen !== videoLoadGeneration) return;
         applyMonitorRatio(videoEl, displayEl);
+        syncDockFloat();
       };
       var handleCanPlay = function () {
         if (gen !== videoLoadGeneration) return;
@@ -347,10 +361,8 @@
       if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
       if (e.type === "keydown") e.preventDefault();
       var dock = document.getElementById("rec-dock");
-      var dockMode =
-        typeof window.matchMedia === "function" &&
-        window.matchMedia("(min-width: 1140px)").matches;
-      if (dock && dockMode && dock.getAttribute("data-expanded") !== "true") {
+      var floatOn = dock && dock.getAttribute("data-dock-float") === "true";
+      if (dock && floatOn && dock.getAttribute("data-expanded") !== "true") {
         dock.setAttribute("data-expanded", "true");
         return;
       }
@@ -361,14 +373,8 @@
     display.addEventListener("click", function (e) {
       if (e.target.closest("a, button")) return;
       var dock = document.getElementById("rec-dock");
-      var dockMode =
-        typeof window.matchMedia === "function" &&
-        window.matchMedia("(min-width: 1140px)").matches;
-      if (
-        dock &&
-        dockMode &&
-        dock.getAttribute("data-expanded") !== "true"
-      ) {
+      var floatOn = dock && dock.getAttribute("data-dock-float") === "true";
+      if (dock && floatOn && dock.getAttribute("data-expanded") !== "true") {
         e.preventDefault();
         e.stopPropagation();
         dock.setAttribute("data-expanded", "true");
@@ -471,7 +477,7 @@
       setIdleMonitor();
     }
 
-    initDockedPreview(document.getElementById("rec-dock"));
+    initDockedPreview(document.getElementById("rec-dock"), syncDockFloat);
   }
 
   function init() {
