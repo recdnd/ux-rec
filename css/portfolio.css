@@ -37,6 +37,24 @@
   --rec-foot-fg: #d0d0d0;
 }
 
+body[data-theme="dark"] {
+  --rec-bg: #111111;
+  --rec-card-bg: #171717;
+  --rec-card-bg-hover: #202020;
+  --rec-card-bg-active: #232323;
+  --rec-display-gutter: #181818;
+  --rec-border: #9a9a9a;
+  --rec-text-primary: #f2f2f2;
+  --rec-text-statement: #e8e8e8;
+  --rec-text-secondary: #b7b7b7;
+  --rec-text-tertiary: #9a9a9a;
+  --rec-text-label: #8d8d8d;
+  --rec-corner-muted: #c7c7c7;
+  --rec-corner-hover: #ffffff;
+  --rec-foot-bg: #000000;
+  --rec-foot-fg: #bdbdbd;
+}
+
 *,
 *::before,
 *::after {
@@ -81,6 +99,37 @@ body {
 }
 
 .rec-hero__link:focus-visible {
+  outline: 1px solid var(--rec-text-primary);
+  outline-offset: 2px;
+}
+
+.rec-util {
+  position: fixed;
+  top: var(--rec-hero-pad);
+  right: var(--rec-hero-pad);
+  z-index: 42;
+}
+
+.rec-util__btn {
+  border: 1px solid var(--rec-border);
+  background: transparent;
+  color: var(--rec-text-label);
+  font-family: var(--rec-font);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 4px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.rec-util__btn:hover,
+.rec-util__btn[aria-pressed="true"] {
+  color: var(--rec-text-primary);
+}
+
+.rec-util__btn:focus-visible {
   outline: 1px solid var(--rec-text-primary);
   outline-offset: 2px;
 }
@@ -679,6 +728,16 @@ body {
     left: 2px;
     right: 2px;
     max-width: none;
+  }
+
+  .rec-util {
+    top: 2px;
+    right: 2px;
+  }
+
+  .rec-util__btn {
+    font-size: 9px;
+    padding: 3px 6px;
   }
 
   .rec-hero__link {

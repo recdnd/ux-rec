@@ -7,6 +7,7 @@
   "use strict";
 
   const DATA_URL = "data/cards.json";
+  const THEME_KEY = "uxrec-theme";
 
   function esc(s) {
     const d = document.createElement("div");
@@ -117,6 +118,35 @@
     videoEl.setAttribute("loop", "");
   }
 
+  function applyTheme(theme, btn) {
+    var isDark = theme === "dark";
+    document.body.setAttribute("data-theme", isDark ? "dark" : "light");
+    if (btn) {
+      btn.setAttribute("aria-pressed", isDark ? "true" : "false");
+      btn.textContent = isDark ? "Normal" : "Invert";
+    }
+  }
+
+  function initThemeToggle() {
+    var btn = document.getElementById("rec-invert-toggle");
+    var saved = "";
+    try {
+      saved = localStorage.getItem(THEME_KEY) || "";
+    } catch (_) {}
+    var initial = saved === "dark" ? "dark" : "light";
+    applyTheme(initial, btn);
+
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      var current = document.body.getAttribute("data-theme") === "dark" ? "dark" : "light";
+      var next = current === "dark" ? "light" : "dark";
+      applyTheme(next, btn);
+      try {
+        localStorage.setItem(THEME_KEY, next);
+      } catch (_) {}
+    });
+  }
+
   function renderCards(cases, rail, display) {
     rail.textContent = "";
     var videoEl = display.querySelector(".rec-display__video");
@@ -172,13 +202,13 @@
     function showVideoMedia(videoEl, displayEl, media, captionText) {
       var gen = ++videoLoadGeneration;
       resetMonitorShape(displayEl);
-      prepareVideoElement(videoEl);
 
       videoEl.pause();
       videoEl.removeAttribute("src");
       videoEl.load();
 
       hideAllMedia();
+      prepareVideoElement(videoEl);
       videoEl.hidden = false;
       videoEl.setAttribute("aria-label", media.alt || "Preview");
       if (media.poster) {
@@ -368,6 +398,7 @@
   }
 
   function init() {
+    initThemeToggle();
     var rail = document.getElementById("rec-rail");
     var display = document.getElementById("rec-display");
     if (!rail || !display) return;
