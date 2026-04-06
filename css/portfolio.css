@@ -105,10 +105,10 @@ body {
 
 .rec-util {
   position: fixed;
-  top: auto !important;
-  left: auto !important;
-  right: 1px !important;
-  bottom: calc(var(--rec-foot-h) + env(safe-area-inset-bottom, 0px) + 1px) !important;
+  top: 2px;
+  left: auto;
+  right: 2px;
+  bottom: auto;
   z-index: 45;
 }
 
@@ -732,6 +732,13 @@ body {
     max-width: none;
   }
 
+  .rec-util {
+    top: 16px;
+    right: 2px;
+    left: auto;
+    bottom: auto;
+  }
+
   .rec-hero__link {
     display: flex;
     align-items: center;
@@ -811,6 +818,11 @@ body {
 
   .rec-stage {
     top: calc(var(--rec-hero-pad) + 1.5rem);
+  }
+
+  .rec-util {
+    top: 15px;
+    right: 2px;
   }
 
   .rec-display {
