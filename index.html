@@ -30,34 +30,42 @@
     <div class="rec-layout">
       <div class="rec-rail" id="rec-rail" role="list" aria-label="Selected work"></div>
 
-      <aside class="rec-stage" aria-label="Preview">
-        <div
-          class="rec-display"
-          id="rec-display"
-          role="button"
-          tabindex="0"
-          data-idle="true"
-          aria-label="Preview monitor. Use play on a case to start."
-        >
-          <span class="rec-display__signal" aria-hidden="true"></span>
-          <div class="rec-display__viewport">
-            <div class="rec-display__inner">
-              <video
-                class="rec-display__video"
-                muted
-                playsinline
-                webkit-playsinline
-                preload="auto"
-                hidden></video>
-              <img class="rec-display__image" alt="" hidden decoding="async" />
-              <div class="rec-display__placeholder" hidden>
-                <p class="rec-display__placeholder-text"></p>
+      <div class="rec-dock" id="rec-dock" data-expanded="false">
+        <button
+          type="button"
+          class="rec-dock__backdrop"
+          id="rec-dock-backdrop"
+          aria-label="Close preview"
+          tabindex="-1"></button>
+        <aside class="rec-stage" aria-label="Preview">
+          <div
+            class="rec-display"
+            id="rec-display"
+            role="button"
+            tabindex="0"
+            data-idle="true"
+            aria-label="Preview monitor. Use play on a case to start."
+          >
+            <span class="rec-display__signal" aria-hidden="true"></span>
+            <div class="rec-display__viewport">
+              <div class="rec-display__inner">
+                <video
+                  class="rec-display__video"
+                  muted
+                  playsinline
+                  webkit-playsinline
+                  preload="auto"
+                  hidden></video>
+                <img class="rec-display__image" alt="" hidden decoding="async" />
+                <div class="rec-display__placeholder" hidden>
+                  <p class="rec-display__placeholder-text"></p>
+                </div>
               </div>
             </div>
+            <div class="rec-display__caption"></div>
           </div>
-          <div class="rec-display__caption"></div>
-        </div>
-      </aside>
+        </aside>
+      </div>
     </div>
   </div>
 

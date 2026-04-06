@@ -131,6 +131,55 @@
     }
   }
 
+  function initDockedPreview(dock) {
+    if (!dock) return;
+    var backdrop = dock.querySelector(".rec-dock__backdrop");
+    if (!backdrop) return;
+
+    var mq =
+      typeof window.matchMedia === "function"
+        ? window.matchMedia("(min-width: 1140px)")
+        : null;
+
+    function isDockMode() {
+      return mq && mq.matches;
+    }
+
+    function setExpanded(on) {
+      if (!isDockMode()) {
+        dock.setAttribute("data-expanded", "false");
+        return;
+      }
+      dock.setAttribute("data-expanded", on ? "true" : "false");
+    }
+
+    backdrop.addEventListener("click", function (e) {
+      e.stopPropagation();
+      setExpanded(false);
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      if (!isDockMode()) return;
+      if (dock.getAttribute("data-expanded") !== "true") return;
+      setExpanded(false);
+    });
+
+    function onMqChange() {
+      if (!mq || !mq.matches) {
+        dock.setAttribute("data-expanded", "false");
+      }
+    }
+
+    if (mq) {
+      if (typeof mq.addEventListener === "function") {
+        mq.addEventListener("change", onMqChange);
+      } else if (typeof mq.addListener === "function") {
+        mq.addListener(onMqChange);
+      }
+    }
+  }
+
   function initThemeToggle() {
     var btn = document.getElementById("rec-invert-toggle");
     var saved = "";
@@ -295,14 +344,36 @@
     }
 
     function onMonitorActivate(e) {
-      if (currentIndex < 0) return;
       if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
       if (e.type === "keydown") e.preventDefault();
+      var dock = document.getElementById("rec-dock");
+      var dockMode =
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(min-width: 1140px)").matches;
+      if (dock && dockMode && dock.getAttribute("data-expanded") !== "true") {
+        dock.setAttribute("data-expanded", "true");
+        return;
+      }
+      if (currentIndex < 0) return;
       nextChannel();
     }
 
     display.addEventListener("click", function (e) {
       if (e.target.closest("a, button")) return;
+      var dock = document.getElementById("rec-dock");
+      var dockMode =
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(min-width: 1140px)").matches;
+      if (
+        dock &&
+        dockMode &&
+        dock.getAttribute("data-expanded") !== "true"
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        dock.setAttribute("data-expanded", "true");
+        return;
+      }
       if (currentIndex < 0) return;
       nextChannel();
     });
@@ -399,6 +470,8 @@
     } else {
       setIdleMonitor();
     }
+
+    initDockedPreview(document.getElementById("rec-dock"));
   }
 
   function init() {
