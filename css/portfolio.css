@@ -507,16 +507,24 @@ body {
 .rec-display[data-orientation="portrait"] {
   width: min(36vw, 351px);
   margin-inline: auto;
+  background: transparent;
+  border-color: transparent;
+  overflow: visible;
 }
 
 .rec-display[data-orientation="portrait"] .rec-display__viewport {
-  padding: 5px;
+  padding: 0;
+  background: transparent;
 }
 
 .rec-display[data-orientation="portrait"] .rec-display__inner {
   width: 100%;
   max-width: 100%;
   margin-inline: auto;
+  border: 1px solid var(--rec-border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.08);
 }
 
 .rec-display[data-orientation="portrait"] .rec-display__video,
@@ -525,6 +533,10 @@ body {
   height: 100%;
   object-fit: contain;
   display: block;
+}
+
+.rec-display[data-orientation="portrait"] .rec-display__caption {
+  margin-top: 2px;
 }
 
 .rec-display[data-orientation="landscape"] .rec-display__inner {
@@ -649,7 +661,7 @@ body {
     min-width: 0;
     margin: 0 auto 16px;
     padding-bottom: 8px;
-    background: var(--rec-bg);
+    background: transparent;
   }
 
   /* Shrink shell first (not only inner) */
