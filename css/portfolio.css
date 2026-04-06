@@ -503,7 +503,7 @@ body {
 
 /* Base portrait monitor variant: narrow shell + full inner */
 .rec-display[data-orientation="portrait"] {
-  width: min(40vw, 390px);
+  width: min(36vw, 351px);
   margin-inline: auto;
 }
 
