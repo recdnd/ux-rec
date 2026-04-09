@@ -1,0 +1,135 @@
+[
+  {
+    "id": "session-stream",
+    "order": 1,
+    "title": "Session Stream",
+    "statement": "AI work unfolds as a continuous workspace rather than a series of closed sessions.",
+    "summary": "Designed a mobile-first navigation model in which documents, conversations, and active contexts are traversed through continuous vertical movement instead of repeated session switching.",
+    "role": [
+      "Interaction model",
+      "UX concept",
+      "Prototype implementation"
+    ],
+    "product": "Spiral",
+    "year": "2025–2026",
+    "tags": [
+      "Mobile UX",
+      "Navigation",
+      "Workspace"
+    ],
+    "detail": {
+      "problem": "Conventional AI interfaces split work into separate sessions, forcing users to repeatedly enter, exit, and reconstruct context across isolated views.",
+      "designMove": "Recast sessions as positions inside a single spatial stream, so movement across tasks happens through scrolling rather than through container changes.",
+      "outcome": "Shifts conversation from session management to spatial navigation, making context easier to retain, revisit, and work across."
+    },
+    "media": {
+      "type": "video",
+      "poster": "movies/session-stream.jpg",
+      "alt": "Mobile interface showing continuous scrolling between AI sessions and documents."
+    },
+    "featured": true,
+    "impact": "Turns multi-session interaction into a spatial navigation model.",
+    "interfaceLens": "AI as workspace",
+    "status": "prototype"
+  },
+  {
+    "id": "meta-control",
+    "order": 2,
+    "title": "Meta Control",
+    "statement": "System behavior is edited in context through language instead of hidden control panels.",
+    "summary": "Designed an interaction layer where users can change document type, access state, and behavioral rules directly from within the workspace using natural language.",
+    "role": [
+      "UX concept",
+      "Interaction design",
+      "System design",
+      "Prototype implementation"
+    ],
+    "product": "Spiral",
+    "year": "2025–2026",
+    "tags": [
+      "Conversational UI",
+      "Metadata",
+      "System control"
+    ],
+    "detail": {
+      "problem": "In most systems, configuration is pushed into secondary panels and technical metadata flows, separating operational control from the work itself.",
+      "designMove": "Placed behavioral control inside the primary interface by letting users issue structural changes in language, with explicit application states that keep the system legible.",
+      "outcome": "Turns configuration into a first-class interaction, allowing system behavior to be modified where the work is actually happening."
+    },
+    "media": {
+      "type": "video",
+      "poster": "movies/meta-control.jpg",
+      "alt": "User changing document type and metadata through natural language commands."
+    },
+    "featured": true,
+    "impact": "Makes system-level behavior editable through interaction instead of hidden configuration.",
+    "interfaceLens": "AI as system interface",
+    "status": "prototype"
+  },
+  {
+    "id": "header-system",
+    "order": 3,
+    "title": "Header System",
+    "statement": "Documents operate as active system objects rather than passive files.",
+    "summary": "Designed a document model where structured headers define execution logic, permissions, and system behavior, making control state readable and editable as part of the document itself.",
+    "role": [
+      "System design",
+      "UX concept",
+      "Interaction design"
+    ],
+    "product": "Spiral",
+    "year": "2025–2026",
+    "tags": [
+      "Document system",
+      "Metadata",
+      "Structure"
+    ],
+    "detail": {
+      "problem": "Most software separates content from behavior, leaving users to navigate between the document they are working on and the hidden structures that determine how it behaves.",
+      "designMove": "Promoted the document header into an explicit control surface, so the governing logic of a document can be inspected, modified, and applied in place.",
+      "outcome": "Repositions documents as programmable interface units whose structure is directly usable rather than concealed in the system layer."
+    },
+    "media": {
+      "type": "video",
+      "poster": "movies/header-system.jpg",
+      "alt": "Document header being modified and applied as a control layer."
+    },
+    "featured": true,
+    "impact": "Turns documents into active components of system behavior.",
+    "interfaceLens": "Document as system unit",
+    "status": "prototype"
+  },
+  {
+    "id": "ghostwriting",
+    "order": 4,
+    "title": "Ghostwriting",
+    "statement": "AI assistance appears inside the draft instead of in a separate conversational channel.",
+    "summary": "Designed an in-place co-writing mode where generated output is inserted directly into the document, keeping composition and assistance inside the same working surface.",
+    "role": [
+      "UX concept",
+      "Interaction design",
+      "Prototype implementation"
+    ],
+    "product": "Spiral",
+    "year": "2025–2026",
+    "tags": [
+      "AI writing",
+      "Editor",
+      "Interaction"
+    ],
+    "detail": {
+      "problem": "Typical AI writing tools split drafting and assistance across two interfaces, which breaks writing flow and turns revision into a context-switching task.",
+      "designMove": "Collapsed the editor and the assistant into one surface, so generation happens exactly where the text is being written and revised.",
+      "outcome": "Produces a co-writing model in which AI behaves as part of the drafting environment rather than as an external sidecar."
+    },
+    "media": {
+      "type": "video",
+      "poster": "movies/ghostwriting.jpg",
+      "alt": "AI writing directly inside a text document alongside user input."
+    },
+    "featured": true,
+    "impact": "Integrates AI into the writing surface instead of separating it.",
+    "interfaceLens": "AI as co-author",
+    "status": "prototype"
+  }
+]
