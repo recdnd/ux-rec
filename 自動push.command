@@ -2,7 +2,14 @@
 set -e
 
 echo "🌿 Spiral 語場同步開始..."
-PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# Resolve script location robustly (works after folder move / symlink launch)
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+while [ -L "$SCRIPT_PATH" ]; do
+  SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
+  SCRIPT_PATH="$(readlink "$SCRIPT_PATH")"
+  [[ "$SCRIPT_PATH" != /* ]] && SCRIPT_PATH="${SCRIPT_DIR}/${SCRIPT_PATH}"
+done
+PROJECT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 cd "$PROJECT_DIR"
 
 PORT=8080
