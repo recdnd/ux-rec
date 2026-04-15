@@ -821,7 +821,27 @@ body {
     width: min(88vw, 380px);
     max-width: min(88vw, 380px);
     transform: translate(-50%, -50%);
+    pointer-events: none;
     transition: none;
+  }
+
+  /*
+   * Expanded mode hit-area model:
+   * - Backdrop owns dismiss click.
+   * - Only real interactive player surfaces receive pointer events.
+   * - Transparent layout space (esp. left/right gutters) must not intercept taps.
+   */
+  .rec-dock[data-dock-float="true"][data-expanded="true"] .rec-stage .rec-display {
+    pointer-events: none;
+  }
+
+  .rec-dock[data-dock-float="true"][data-expanded="true"] .rec-stage .rec-display__inner,
+  .rec-dock[data-dock-float="true"][data-expanded="true"] .rec-stage .rec-display__video,
+  .rec-dock[data-dock-float="true"][data-expanded="true"] .rec-stage .rec-display__image,
+  .rec-dock[data-dock-float="true"][data-expanded="true"] .rec-stage .rec-display__placeholder,
+  .rec-dock[data-dock-float="true"][data-expanded="true"] .rec-stage .rec-display__caption,
+  .rec-dock[data-dock-float="true"][data-expanded="true"] .rec-stage .rec-display__signal {
+    pointer-events: auto;
   }
 
   .rec-dock[data-dock-float="true"]:not([data-expanded="true"]) .rec-display[data-orientation="portrait"] {
